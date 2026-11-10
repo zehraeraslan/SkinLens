@@ -8,5 +8,5 @@ authors:
     affiliation: "Üsküdar University"
 license: MIT
 date-released: "2026-06-01"
-repository-code: "https://github.com/YOUR_USERNAME/SkinLens"
+repository-code: "https://github.com/zehraeraslan/SkinLens"
 keywords: [skin disease detection, deep learning, DenseNet121, Grad-CAM, dermatology]

@@ -1,7 +1,7 @@
 """Download trained model files into ./models (set BASE_URL to your GitHub Release or Hugging Face URL)."""
 import pathlib, urllib.request
 
-BASE_URL = "https://github.com/YOUR_USERNAME/SkinLens/releases/download/v1.0.0"
+BASE_URL = "https://github.com/zehraeraslan/SkinLens/releases/download/v1.0.0"
 FILES = [
     "focal_finetuned_skin_model.keras",
     "best_hybrid_model.h5",
