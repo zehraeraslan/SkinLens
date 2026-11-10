@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "SkinLens: Detection and Information System of Skin Diseases Using Image Processing"
+type: software
+authors:
+  - family-names: Eraslan
+    given-names: Zehra
+    affiliation: "Üsküdar University"
+license: MIT
+date-released: "2026-06-01"
+repository-code: "https://github.com/YOUR_USERNAME/SkinLens"
+keywords: [skin disease detection, deep learning, DenseNet121, Grad-CAM, dermatology]
