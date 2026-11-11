@@ -60,6 +60,8 @@ Test set n = 771 · Accuracy **92.7 %** · Macro F1 0.93 (re-measured on the sup
 Main confusions: acne → Blackheads (20), wrinkles → pores (17), pores → Blackheads (10). On test images whose source image is absent from train (n = 521) accuracy is 91.0 %. Mean confidence 0.97; 37 of 771 predictions fall below the 70 % threshold.
 
 ## Limitations
+- **Training images are not facial photographs.** The disease model was trained on ISIC dermoscopy images and clinical photographs of various body sites (see `docs/dataset_provenance.md`); behaviour on facial photos has not been evaluated.
+- **Image source is confounded with diagnosis** (Melanoma ≈ ISIC dermoscopy, other classes ≈ clinical photos), so accuracy overstates disease-recognition ability.
 - Melanoma F1 0.56 / recall 0.51 — below clinical screening standards; small test set (59).
 - Datasets are small and may not represent all skin tones, ages or imaging conditions.
 - Single standard photograph; no dermoscopy, patient history or multi-angle input.

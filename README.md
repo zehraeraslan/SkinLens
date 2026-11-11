@@ -48,6 +48,8 @@ Disease model progression: Stage 1 **81.26 %** → Stage 2 (fine-tuning, val 85.
 
 > ⚠️ **Evaluation caveat.** 547 of the 1,430 disease test images (38.3 %) are byte-identical to training or validation images. On the remaining 883 unseen images accuracy is **85.96 %**; the headline 87.97 % is therefore slightly optimistic. Skin-type accuracy was also measured on a split with train/test overlap; see the [Model Card](docs/model-card.md). A leakage-free re-evaluation of skin type is pending.
 
+> ⚠️ The disease model was trained on ISIC dermoscopy and clinical photographs of various body sites, **not on facial photographs**; image source is partly confounded with diagnosis. See [docs/dataset_provenance.md](docs/dataset_provenance.md).
+
 **Known limitation:** Melanoma remains the hardest class (F1 = 0.56, recall = 0.51, n = 59). Results are advisory only. See the [Model Card](docs/model-card.md) for per-class metrics and limitations.
 
 ## Features

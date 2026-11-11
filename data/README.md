@@ -33,6 +33,8 @@ Measured counts:
 
 Sources: ISIC archive (augmented subsets) and public dermatology repositories. Images are 224×224 RGB.
 
+Provenance, duplicate statistics and source analysis: see [../docs/dataset_provenance.md](../docs/dataset_provenance.md).
+
 How `final_dataset` was built (`training/skin_disease/data_preparation/final_dataset_builder.py`): source train/valid/test pooled → *Benign keratosis* + *Melanocytic nevus* merged into `benign_lesion` and undersampled to 4,500 → random 80/10/10 split per class (seed 42) → train-only augmentation (flip, rotate ±20°, brightness/contrast, affine, Gaussian noise). Class totals match this recipe exactly (e.g. Tinea 880/110/111 = 80/10/10 of 1,101, i.e. Tinea was **not** augmented in the final dataset, Melanoma was). No de-duplication was applied before the split.
 
 > ⚠️ **Data-leakage warning.** `scripts/audit_split_leakage.py` found **483 of the 1,430 test images (33.8 %) byte-identical to training images**, 72 test images identical to validation images and 488 validation images identical to training images. Melanoma is also 14 % of train but only 4 % of valid/test, i.e. the training set contains duplicated/augmented Melanoma images. The reported 87.97 % test accuracy is therefore optimistic. Including validation, 547 test images (38.3 %) have an identical twin in train or valid; accuracy on the other 883 is 85.96 % (see `docs/model-card.md`). `scripts/evaluate_skin_disease.py` reproduces this, and rebuild the split with `scripts/make_clean_split.py` before retraining.
