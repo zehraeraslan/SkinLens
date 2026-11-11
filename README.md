@@ -40,12 +40,13 @@ Every prediction is accompanied by a **Grad-CAM heatmap**, and a **70 % confiden
 | Model | Test set | Accuracy | Macro F1 | Weighted F1 |
 |---|---|---|---|---|
 | Skin Disease (final, focal loss) | 1,430 images | **87.97 %** | 0.79 | 0.88 |
+| Skin Disease — leakage-free subset | 883 images | **85.96 %** | 0.78 | 0.86 |
 | Skin Type (hybrid CNN + LBP) | 235 images | **92.00 %** | 0.93 | 0.92 |
 | Skin Concern (EfficientNetB0) | 771 images | **92.74 %** | 0.93 | 0.93 |
 
 Disease model progression: Stage 1 **81.26 %** → Stage 2 (fine-tuning, val 85.02 %) → Stage 3 **87.97 %** (+6.71 pp).
 
-> ⚠️ The disease test set contains 33.8 % images that are byte-identical to training images (483 / 1,430), so 87.97 % is optimistic. Skin-type accuracy was also measured on a split with train/test overlap; see the [Model Card](docs/model-card.md#skin-type-model-hybrid-cnn--lbp). A leakage-free re-evaluation is in progress.
+> ⚠️ **Evaluation caveat.** 547 of the 1,430 disease test images (38.3 %) are byte-identical to training or validation images. On the remaining 883 unseen images accuracy is **85.96 %**; the headline 87.97 % is therefore slightly optimistic. Skin-type accuracy was also measured on a split with train/test overlap; see the [Model Card](docs/model-card.md). A leakage-free re-evaluation of skin type is pending.
 
 **Known limitation:** Melanoma remains the hardest class (F1 = 0.56, recall = 0.51, n = 59). Results are advisory only. See the [Model Card](docs/model-card.md) for per-class metrics and limitations.
 

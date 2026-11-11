@@ -4,7 +4,18 @@
 Educational, preliminary screening from a single facial/skin photograph. **Not** for diagnosis or clinical decisions.
 
 ## Disease model (DenseNet121, focal-loss fine-tuned)
-> ⚠️ **Evaluation caveat.** 483 of the 1,430 test images (33.8 %) are byte-identical to training images (see `data/README.md`). The figures below were measured on the original split and are optimistic; a leakage-free re-evaluation is pending.
+> ⚠️ **Evaluation caveat.** 547 of the 1,430 test images (38.3 %) are byte-identical to training or validation images (`scripts/evaluate_skin_disease.py`). The table below is the original, optimistic evaluation. On the 883 test images that do **not** occur in train/valid, accuracy is **85.96 %** (leaked images: 91.22 %). Near-duplicates are not detected, so this is still an upper bound.
+
+| Class (clean subset, n = 883) | Precision | Recall | F1 | Support | Leaked (of 1,430-set) |
+|---|---|---|---|---|---|
+| Acne | 0.96 | 0.91 | 0.93 | 202 | 94 / 296 |
+| Atopic Dermatitis | 0.65 | 0.94 | 0.77 | 97 | **417 / 514** |
+| Melanoma | 0.62 | 0.52 | 0.56 | 56 | 3 / 59 |
+| Tinea/Ringworm/Candidiasis | 0.88 | 0.61 | 0.72 | 106 | 5 / 111 |
+| Benign Lesion | 0.91 | 0.92 | 0.92 | 422 | 28 / 450 |
+
+Observations: 81 % of the Atopic Dermatitis test images are duplicates of training images, so the clean AD figures rest on only 97 images. Melanoma performance is unaffected by leakage (F1 0.56): 27 of 56 clean Melanoma images are classified as benign lesions and 18 benign lesions as Melanoma. 33 of 106 Tinea images are classified as Atopic Dermatitis.
+
 
 Architecture (verified from the model file): DenseNet121 (432 layers, 7.3 M params) → GAP → BatchNorm → Dense(256, ReLU) → Dropout(0.5) → Dense(5, softmax). In Stage 3 all layers are trainable.
 
