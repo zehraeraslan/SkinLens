@@ -18,7 +18,7 @@ git add training/skin_type && git commit -m "feat(skin-type): hybrid DenseNet121
 git add training/skin_concern && git commit -m "feat(skin-concern): EfficientNetB0 training and Grad-CAM"
 git add training/skin_disease && git commit -m "feat(disease): three-stage DenseNet121 training"
 git add backend frontend server notebooks models && git commit -m "chore: project skeleton"
-git remote add origin https://github.com/YOUR_USERNAME/SkinLens.git
+git remote add origin https://github.com/zehraeraslan/SkinLens.git
 git push -u origin main
 ```
 

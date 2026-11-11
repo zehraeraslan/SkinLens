@@ -18,21 +18,22 @@ Sources: Kaggle MSC-6 and other web/Roboflow images. About half of the files (1,
 
 ## Skin Disease (15,630 images)
 ```
-skin_disease/{train,val,test}/{Acne,Atopic_Dermatitis,Benign_Lesion,Melanoma,Tinea_Ringworm_Candidiasis}/
+final_dataset/{train,valid,test}/{Acne,Atopic Dermatitis,Melanoma,Tinea Ringworm Candidiasis,benign_lesion}/
 ```
-Split: train 12,771 · validation 1,429 · test 1,430. Sources: ISIC archive (augmented subsets) and public dermatology repositories.
+Measured counts:
 
-Class counts (test measured; train derived from the balanced class weights in the thesis):
+| Class | train | valid | test |
+|---|---|---|---|
+| Acne | 2,366 | 296 | 296 |
+| Atopic Dermatitis | 4,108 | 514 | 514 |
+| Melanoma | 1,817 | 59 | 59 |
+| Tinea Ringworm Candidiasis | 880 | 110 | 111 |
+| benign_lesion | 3,600 | 450 | 450 |
+| **Total** | **12,771** | **1,429** | **1,430** |
 
-| Class | Train (≈) | Train % | Test | Test % |
-|---|---|---|---|---|
-| Acne | 2,367 | 18.5 | 296 | 20.7 |
-| Atopic Dermatitis | 4,106 | 32.2 | 514 | 35.9 |
-| Melanoma | 1,816 | **14.2** | 59 | **4.1** |
-| Tinea/Ringworm/Candidiasis | 879 | 6.9 | 111 | 7.8 |
-| Benign Lesion | 3,597 | 28.2 | 450 | 31.5 |
+Sources: ISIC archive (augmented subsets) and public dermatology repositories. Images are 224×224 RGB.
 
-> ⚠️ Melanoma is 14 % of train but only 4 % of test, while all other classes keep similar shares. This suggests the training set contains augmented/oversampled Melanoma images and is not a pure stratified split. Run `scripts/audit_split_leakage.py` on this dataset before trusting the reported 87.97 %.
+> ⚠️ **Data-leakage warning.** `scripts/audit_split_leakage.py` found **483 of the 1,430 test images (33.8 %) byte-identical to training images**, 72 test images identical to validation images and 488 validation images identical to training images. Melanoma is also 14 % of train but only 4 % of valid/test, i.e. the training set contains duplicated/augmented Melanoma images. The reported 87.97 % test accuracy is therefore optimistic. Run `scripts/evaluate_skin_disease.py` for accuracy on the leakage-free subset, and rebuild the split with `scripts/make_clean_split.py` before retraining.
 
 ## Skin Concern (6,247 images)
 ```

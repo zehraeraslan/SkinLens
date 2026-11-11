@@ -4,6 +4,8 @@
 Educational, preliminary screening from a single facial/skin photograph. **Not** for diagnosis or clinical decisions.
 
 ## Disease model (DenseNet121, focal-loss fine-tuned)
+> ⚠️ **Evaluation caveat.** 483 of the 1,430 test images (33.8 %) are byte-identical to training images (see `data/README.md`). The figures below were measured on the original split and are optimistic; a leakage-free re-evaluation is pending.
+
 Architecture (verified from the model file): DenseNet121 (432 layers, 7.3 M params) → GAP → BatchNorm → Dense(256, ReLU) → Dropout(0.5) → Dense(5, softmax). In Stage 3 all layers are trainable.
 
 Test set n = 1,430 · Accuracy **87.97 %** · Macro F1 0.79 · Weighted F1 0.88

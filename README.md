@@ -45,7 +45,7 @@ Every prediction is accompanied by a **Grad-CAM heatmap**, and a **70 % confiden
 
 Disease model progression: Stage 1 **81.26 %** → Stage 2 (fine-tuning, val 85.02 %) → Stage 3 **87.97 %** (+6.71 pp).
 
-> ⚠️ Skin-type accuracy was measured on a split with train/test overlap; see the [Model Card](docs/model-card.md#skin-type-model-hybrid-cnn--lbp). A leakage-free re-evaluation is in progress.
+> ⚠️ The disease test set contains 33.8 % images that are byte-identical to training images (483 / 1,430), so 87.97 % is optimistic. Skin-type accuracy was also measured on a split with train/test overlap; see the [Model Card](docs/model-card.md#skin-type-model-hybrid-cnn--lbp). A leakage-free re-evaluation is in progress.
 
 **Known limitation:** Melanoma remains the hardest class (F1 = 0.56, recall = 0.51, n = 59). Results are advisory only. See the [Model Card](docs/model-card.md) for per-class metrics and limitations.
 
