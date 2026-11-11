@@ -13,3 +13,15 @@ Notes
 - Class indices are alphabetical folder names; inference code must use the same order.
 - Loading the final model for inference: `load_model(path, compile=False)`; for evaluation pass `custom_objects={'loss': focal_loss(2, 0.25)}`.
 - In the focal loss α is a single scalar, so it rescales the loss but does **not** re-balance classes.
+
+## Data preparation (`data_preparation/`)
+| Script | Role |
+|---|---|
+| `final_dataset_builder.py` | **Original** builder of `final_dataset` (pool → merge benign → undersample → 80/10/10 split → augment train). No de-duplication. |
+| `legacy_dataset_builder.py` | Earlier, superseded version |
+| `clean_corrupt_images.py` | Deletes unreadable images in place |
+| `dataset_audit.py` | Per-class split statistics, suggested class weights |
+
+`evaluate_stage2.py` evaluates the Stage 2 model (`finetuned_skin_model.keras`) on the test set.
+
+Leakage-free rebuild: `python scripts/build_clean_disease_dataset.py --src final_dataset --dst final_dataset_clean`, then set `BASE_DIR` in the three training scripts and **change the output model file names** so the existing models are not overwritten.
