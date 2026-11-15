@@ -34,5 +34,5 @@ No build log was kept. Everything below is **reconstructed** from (a) the data-p
 3. **Class labels are umbrella categories** (e.g. "Acne" includes rosacea and perioral dermatitis; "Atopic Dermatitis" includes stasis dermatitis and lichen simplex chronicus), not single diagnoses.
 
 ## To confirm
-- Open `pigmentation_*` images in `train/Acne` and check whether they really show acne.
+- `pigmentation_*` images in `train/Acne`: a visual check of 12 random samples by the author found acne lesions (not a dermatologist review).
 - Identify the original dataset pages (browser history, Kaggle) and record names, URLs and licences. DermNet-derived images carry their own licence terms; images are **not** redistributed in this repository.

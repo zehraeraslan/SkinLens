@@ -1,33 +1,26 @@
-import os,sys,re,hashlib,numpy as np
-os.environ["TF_CPP_MIN_LOG_LEVEL"]="3"
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
-import tensorflow as tf
-from split_utils import base_name, md5
+"""Evaluate the skin concern model with the SAME preprocessing as training (bilinear resize via
+image_dataset_from_directory) overall and on a leakage-free subset.
+
+Usage: python scripts/evaluate_skin_concern.py --data data/skin_concern --model models/skin_concern_final_model.keras
+"""
+import argparse, os
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
+import numpy as np, tensorflow as tf
 from sklearn.metrics import classification_report, confusion_matrix
-root="data/skin_concern"; classes=sorted(os.listdir(f"{root}/train"))  # keras alphabetical (uppercase first)
-print(classes)
-tr_b=set();tr_h=set()
+from split_utils import base_name, md5
+
+ap = argparse.ArgumentParser(); ap.add_argument("--data", required=True); ap.add_argument("--model", required=True); a = ap.parse_args()
+ds = tf.keras.utils.image_dataset_from_directory(os.path.join(a.data, "test"), image_size=(224, 224), batch_size=32, shuffle=False, label_mode="int")
+classes, paths = ds.class_names, ds.file_paths
+y = np.concatenate([l for _, l in ds])
+model = tf.keras.models.load_model(a.model, compile=False)
+P = model.predict(ds, verbose=0); pred = P.argmax(1)
+print("Accuracy", round(float((pred == y).mean()), 4), "n =", len(y))
+print(classification_report(y, pred, target_names=classes, digits=2)); print(confusion_matrix(y, pred))
+tr_b, tr_h = set(), set()
 for c in classes:
-    for f in os.listdir(f"{root}/train/{c}"):
-        if f.lower().endswith(".jpg"): tr_b.add((c,base_name(f))); tr_h.add(md5(f"{root}/train/{c}/{f}"))
-files=[];Y=[];clean=[]
-for i,c in enumerate(classes):
-    for f in sorted(os.listdir(f"{root}/test/{c}")):
-        p=f"{root}/test/{c}/{f}"; files.append(p);Y.append(i); clean.append((c,base_name(f)) not in tr_b and md5(p) not in tr_h)
-Y=np.array(Y);clean=np.array(clean)
-X=np.stack([tf.keras.utils.img_to_array(tf.keras.utils.load_img(p,target_size=(224,224))) for p in files])
-print("test",len(Y),"clean",clean.sum())
-for m in ["models/skin_concern_final_model.keras"]:
-    print("\n=====",m)
-    try:
-        model=tf.keras.models.load_model(m,compile=False,safe_mode=False)
-    except Exception as e:
-        print("LOAD FAIL",str(e)[:300]); continue
-    print("inputs",[i.shape for i in model.inputs],"out",model.output_shape,"layers",len(model.layers),"names",[l.name for l in model.layers[:4]],"params",model.count_params())
-    if len(model.inputs)>1: print("multi-input; skip"); continue
-    P=model.predict(X,batch_size=32,verbose=0);pr=P.argmax(1)
-    print("acc all",(pr==Y).mean().round(4),"clean",(pr[clean]==Y[clean]).mean().round(4))
-    if "skin_concern_final" in m:
-        print(classification_report(Y,pr,target_names=classes,digits=2));print(confusion_matrix(Y,pr))
-        print("clean report");print(classification_report(Y[clean],pr[clean],target_names=classes,digits=2))
-        c=P.max(1);print("conf mean",c.mean().round(3),"<0.7:",(c<0.7).sum())
+    for f in os.listdir(os.path.join(a.data, "train", c)):
+        tr_b.add((c, base_name(f))); tr_h.add(md5(os.path.join(a.data, "train", c, f)))
+clean = np.array([(classes[i], base_name(os.path.basename(p))) not in tr_b and md5(p) not in tr_h for p, i in zip(paths, y)])
+print("Leakage-free subset: n =", clean.sum(), "accuracy", round(float((pred[clean] == y[clean]).mean()), 4), "| others:", round(float((pred[~clean] == y[~clean]).mean()), 4))
+conf = P.max(1); print("Mean confidence", round(float(conf.mean()), 3), "| below 0.70:", int((conf < 0.7).sum()), "| accuracy of the rest:", round(float((pred[conf >= 0.7] == y[conf >= 0.7]).mean()), 4))

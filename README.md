@@ -41,12 +41,14 @@ Every prediction is accompanied by a **Grad-CAM heatmap**, and a **70 % confiden
 |---|---|---|---|---|
 | Skin Disease (final, focal loss) | 1,430 images | **87.97 %** | 0.79 | 0.88 |
 | Skin Disease — leakage-free subset | 883 images | **85.96 %** | 0.78 | 0.86 |
-| Skin Type (hybrid CNN + LBP) | 235 images | **92.00 %** | 0.93 | 0.92 |
-| Skin Concern (EfficientNetB0) | 771 images | **92.74 %** | 0.93 | 0.93 |
+| Skin Type (hybrid CNN + LBP) | 235 images | **92.34 %** | 0.93 | 0.92 |
+| Skin Type — leakage-free subset | 169 images | **89.35 %** | – | – |
+| Skin Concern — leakage-free subset | 521 images | **91.94 %** | – | – |
+| Skin Concern (EfficientNetB0) | 771 images | **93.77 %** | 0.94 | 0.94 |
 
 Disease model progression: Stage 1 **81.26 %** → Stage 2 (fine-tuning, val 85.02 %) → Stage 3 **87.97 %** (+6.71 pp).
 
-> ⚠️ **Evaluation caveat.** 547 of the 1,430 disease test images (38.3 %) are byte-identical to training or validation images. On the remaining 883 unseen images accuracy is **85.96 %**; the headline 87.97 % is therefore slightly optimistic. Skin-type accuracy was also measured on a split with train/test overlap; see the [Model Card](docs/model-card.md). A leakage-free re-evaluation of skin type is pending.
+> ⚠️ **Evaluation caveat.** 547 of the 1,430 disease test images (38.3 %) are byte-identical to training or validation images. On the remaining 883 unseen images accuracy is **85.96 %**; the headline 87.97 % is therefore slightly optimistic. Skin-type (65 of 235 test images identical to training images) and skin-concern (5 of 771) test sets also contain duplicates; leakage-free values are in the table above and in the [Model Card](docs/model-card.md).
 
 > ⚠️ The disease model was trained on ISIC dermoscopy and clinical photographs of various body sites, **not on facial photographs**; image source is partly confounded with diagnosis. See [docs/dataset_provenance.md](docs/dataset_provenance.md).
 

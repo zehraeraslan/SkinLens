@@ -45,19 +45,19 @@ Test set n = 235 · Accuracy **92 %** · Macro F1 0.93
 | Oily | 0.87 | 0.92 | 0.90 | 65 |
 | Sensitive | 0.90 | 1.00 | 0.95 | 45 |
 
-> ⚠️ **Evaluation caveat (skin type).** The reported 92 % was measured on the original split, which contains duplicate / augmented copies of training images (see `data/README.md`). On the subset of test images whose source image does not occur in train (n = 95, no Sensitive samples), the same model scored ≈ 86 %. A leakage-free re-split and retraining is recommended before claiming final performance.
+> ⚠️ **Evaluation caveat (skin type).** The original split was made after offline augmentation: 65 of the 235 test images are byte-identical to training images (66 to training or validation) and 136 share a source file name with a training image. Measured with the training-time pipeline: accuracy 92.34 % on all 235 test images, **89.35 %** on the 169 images without an identical counterpart in train/valid, 84.2 % on the 95 images that also share no source name with train (no Sensitive images), 97.9 % on the remaining 140. A source-level re-split and retraining is recommended.
 
 ## Skin concern model (EfficientNetB0)
-Test set n = 771 · Accuracy **92.7 %** · Macro F1 0.93 (re-measured on the supplied `skin_concern_final_model.keras`, TensorFlow 2.21; not copied from a training log).
+Test set n = 771 · Accuracy **93.77 %** · Macro F1 0.94 (measured on the supplied `skin_concern_final_model.keras` with `image_dataset_from_directory`, i.e. the training-time preprocessing).
 
 | Class | Precision | Recall | F1 | Support |
 |---|---|---|---|---|
-| Blackheads | 0.86 | 0.98 | 0.92 | 199 |
-| acne | 0.99 | 0.89 | 0.94 | 217 |
-| pores | 0.88 | 0.94 | 0.91 | 165 |
-| wrinkles | 0.99 | 0.89 | 0.94 | 190 |
+| Blackheads | 0.88 | 0.98 | 0.93 | 199 |
+| acne | 0.99 | 0.92 | 0.95 | 217 |
+| pores | 0.89 | 0.94 | 0.91 | 165 |
+| wrinkles | 0.99 | 0.91 | 0.95 | 190 |
 
-Main confusions: acne → Blackheads (20), wrinkles → pores (17), pores → Blackheads (10). On test images whose source image is absent from train (n = 521) accuracy is 91.0 %. Mean confidence 0.97; 37 of 771 predictions fall below the 70 % threshold.
+Main confusions: wrinkles → pores (15), acne → Blackheads (14), pores → Blackheads (10). Five test images are byte-identical to training images; on the 521 test images with no identical or same-source counterpart in train accuracy is 91.94 % (250 others: 97.6 %). Mean confidence 0.97; 27 of 771 predictions (3.5 %) fall below the 70 % threshold, accuracy of the rest 95.4 %.
 
 ## Limitations
 - **Training images are not facial photographs.** The disease model was trained on ISIC dermoscopy images and clinical photographs of various body sites (see `docs/dataset_provenance.md`); behaviour on facial photos has not been evaluated.

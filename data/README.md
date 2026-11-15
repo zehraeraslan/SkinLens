@@ -14,7 +14,7 @@ skin_type/{train,validation,test}/{Dry,Normal,Oily,Sensitive}/
 
 Sources: Kaggle MSC-6 and other web/Roboflow images. About half of the files (1,200 / 2,388) are offline augmentations (flip / rotate).
 
-> ⚠️ **Data-leakage warning.** The original split was made *after* offline augmentation. An audit (`scripts/audit_split_leakage.py`) found **63 byte-identical images shared by train and test**, and 80 of 156 test source images also appear (augmented) in train. Use `scripts/make_clean_split.py` to build a leakage-free split (group-wise by source image) and re-evaluate.
+> ⚠️ **Data-leakage warning.** The original split was made *after* offline augmentation. An audit (`scripts/audit_split_leakage.py`) found **65 test images byte-identical to training images**, and 80 of 156 test source images also appear (augmented) in train. Use `scripts/make_clean_split.py` to build a leakage-free split (group-wise by source image) and re-evaluate.
 
 ## Skin Disease (15,630 images)
 ```
@@ -49,6 +49,6 @@ skin_concern/{train,valid,test}/{acne,Blackheads,pores,wrinkles}/
 | valid | 108 | 202 | 163 | 206 | 679 |
 | test | 217 | 199 | 165 | 190 | 771 |
 
-> Leakage audit: 5 test images are byte-identical to train images and 67 of 1,129 test source images also occur in train (Roboflow augmentations of one source). Validation overlaps train even more (67 of 208 sources). Test accuracy is therefore slightly optimistic (≈ 91 % on the leakage-free subset vs 92.7 %).
+> Leakage audit: 5 test images are byte-identical to train images and 67 of 1,129 test source images also occur in train (Roboflow augmentations of one source). Validation overlaps train even more (67 of 208 sources). Test accuracy is therefore slightly optimistic (≈ 91.9 % on the leakage-free subset vs 93.8 %).
 
 Several images carry Roboflow-style names (`*.rf.<hash>.jpg`); respect the original dataset licences when redistributing.
