@@ -35,6 +35,16 @@ It combines **three specialised deep-learning models**:
 
 Every prediction is accompanied by a **Grad-CAM heatmap**, and a **70 % confidence threshold** flags low-certainty results. A rule-based engine then produces personalised skincare routines and ingredient suggestions.
 
+## Screenshots
+
+<p align="center"><img src="docs/images/ui-home.png" width="820" alt="SkinLens home page"></p>
+
+| Select an analysis mode | How it works |
+|---|---|
+| <img src="docs/images/ui-select-mode.png" alt="Analysis mode selection"> | <img src="docs/images/ui-how-it-works.png" alt="How it works"> |
+| **System pipeline and 70 % confidence gate** | **Recommendations and medical disclaimer** |
+| <img src="docs/images/ui-pipeline-confidence.png" alt="Pipeline and confidence"> | <img src="docs/images/ui-recommendations-disclaimer.png" alt="Recommendations and disclaimer"> |
+
 ## Results
 
 | Model | Test set | Accuracy | Macro F1 | Weighted F1 |
@@ -53,6 +63,17 @@ Disease model progression: Stage 1 **81.26 %** → Stage 2 (fine-tuning, val 85.
 > ⚠️ The disease model was trained on ISIC dermoscopy and clinical photographs of various body sites, **not on facial photographs**; image source is partly confounded with diagnosis. See [docs/dataset_provenance.md](docs/dataset_provenance.md).
 
 **Known limitation:** Melanoma remains the hardest class (F1 = 0.56, recall = 0.51, n = 59). Results are advisory only. See the [Model Card](docs/model-card.md) for per-class metrics and limitations.
+
+### Figures
+
+<p align="center"><img src="docs/images/disease-training-pipeline.png" width="820" alt="Three-stage disease training pipeline"></p>
+<p align="center"><img src="docs/images/hybrid-skin-type-model.png" width="820" alt="Hybrid skin type model"></p>
+
+| Skin type — training curves | Skin type — confusion matrix (test, n = 235) |
+|---|---|
+| <img src="docs/images/skin-type-training-curves.png" alt="Skin type training curves"> | <img src="docs/images/skin-type-confusion-matrix.png" alt="Skin type confusion matrix"> |
+| **Skin concern — confusion matrix (test, n = 771)** | **Skin concern — Grad-CAM example** |
+| <img src="docs/images/skin-concern-confusion-matrix.png" alt="Skin concern confusion matrix"> | <img src="docs/images/skin-concern-gradcam.png" alt="Grad-CAM example"> |
 
 ## Features
 

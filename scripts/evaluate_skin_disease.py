@@ -18,6 +18,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 ap = argparse.ArgumentParser()
 ap.add_argument("--data", required=True)
 ap.add_argument("--model", required=True)
+ap.add_argument("--figdir", help="optional folder to save confusion-matrix PNGs")
 a = ap.parse_args()
 
 EXT = (".jpg", ".jpeg", ".png", ".jfif", ".webp")
@@ -58,3 +59,17 @@ report("CLEAN test images (not in train/valid)", ~leak)
 print("\nLeaked images accuracy: %.4f (n=%d)" % ((pred[leak] == y_true[leak]).mean(), leak.sum()) if leak.any() else "\nNo leaked images")
 print("\nLeaked per class:", {classes[i]: int(((y_true == i) & leak).sum()) for i in range(len(classes))})
 print("Confusion matrix (clean subset):\n", confusion_matrix(y_true[~leak], pred[~leak], labels=range(len(classes))))
+
+if a.figdir:
+    import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
+    os.makedirs(a.figdir, exist_ok=True)
+    for name, m in (("all", np.ones(len(test), bool)), ("leakage_free", ~leak)):
+        cm = confusion_matrix(y_true[m], pred[m], labels=range(len(classes)))
+        fig, ax = plt.subplots(figsize=(7.5, 6)); im = ax.imshow(cm, cmap="Blues"); plt.colorbar(im, ax=ax, fraction=.046)
+        ax.set_xticks(range(len(classes)), classes, rotation=30, ha="right"); ax.set_yticks(range(len(classes)), classes)
+        for i in range(len(classes)):
+            for j in range(len(classes)): ax.text(j, i, cm[i, j], ha="center", va="center", color="white" if cm[i, j] > cm.max() / 2 else "black")
+        ax.set_xlabel("Predicted class"); ax.set_ylabel("True class")
+        ax.set_title(f"Skin disease model - confusion matrix ({'all test images' if name == 'all' else 'leakage-free subset'}, n={int(m.sum())})")
+        fig.tight_layout(); fig.savefig(os.path.join(a.figdir, f"disease_confusion_matrix_{name}.png"), dpi=120); plt.close(fig)
+    print("Saved confusion matrices to", a.figdir)
