@@ -1,0 +1,10 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+pydantic-settings>=2.4
+tensorflow-cpu==2.21.0
+numpy
+opencv-python-headless
+pillow
+scikit-image
+reportlab

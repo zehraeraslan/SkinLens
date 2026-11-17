@@ -1,8 +1,0 @@
-fastapi
-uvicorn[standard]
-python-multipart
-tensorflow>=2.13
-numpy
-opencv-python-headless
-scikit-image
-pillow

@@ -1,0 +1,13 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+python_backend/models/*
+!python_backend/models/.gitkeep
+__pycache__/
+.venv/
+.env
+.env.*
+!.env.example

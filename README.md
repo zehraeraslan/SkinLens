@@ -102,41 +102,33 @@ Details: [docs/architecture.md](docs/architecture.md)
 
 ```
 SkinLens/
-├── frontend/      # React + TypeScript SPA
-├── server/        # Express.js gateway / reverse proxy
-├── backend/       # FastAPI inference server (TensorFlow, Grad-CAM, recommendations)
+├── app/           # Web application: client (React), server (Express), python_backend (FastAPI + TensorFlow)
 ├── training/      # Training code (skin_disease/, skin_type/, skin_concern/)
-├── notebooks/     # Notebooks
+├── scripts/       # Data audit, clean split, evaluation, model download
 ├── models/        # Model files (not tracked – see models/README.md)
 ├── data/          # Dataset documentation (images not tracked – see data/README.md)
-├── docs/          # Thesis, architecture, model card, deployment guide
-└── scripts/       # Data audit, clean split, model download
+├── deploy/        # Docker image for Hugging Face Spaces (free hosting)
+└── docs/          # Thesis results, architecture, model card, deployment, changelog
 ```
 
 ## Getting Started
 
-### Prerequisites
-Python 3.11 · Node.js 18+ · the trained model files in `models/` (see [models/README.md](models/README.md))
+Prerequisites: Python 3.11+, Node.js 20+, and the trained models (see [models/README.md](models/README.md)).
 
-### 1. Backend
 ```bash
-cd backend
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000
-```
+python scripts/download_models.py          # downloads the 3 models into models/
+cp models/*.keras models/*.h5 app/python_backend/models/
 
-### 2. Server + Frontend
-```bash
-npm install
-npm run build
-npm start          # serves UI and proxies /api to http://localhost:8000
-```
+# terminal 1 — inference server
+cd app/python_backend && python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt && ./run.sh        # http://localhost:8000
 
-Copy `.env.example` to `.env` and adjust values if needed.
+# terminal 2 — web server
+cd app && npm install && npm run dev               # http://localhost:5000
+```
 
 ### API
-`POST /api/analyze?mode={full|skin_type|disease|concern}` — `multipart/form-data`, field `file` (JPEG/PNG, max 8 MB). Returns predictions, confidences, Grad-CAM overlays and recommendations as JSON.
+`POST /api/analyze` — `multipart/form-data`, field `image` (JPEG/PNG, max 8 MB) and `mode` (`full | skin_type | disease | concern`). Returns predictions, confidences, Grad-CAM overlays and recommendations as JSON. Details: [app/README.md](app/README.md).
 
 ## Live Demo
 > _Add link here after deployment (see [docs/deployment.md](docs/deployment.md))._
