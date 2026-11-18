@@ -177,7 +177,9 @@ Dermoscopy support · larger and more diverse data (skin tones, ages) · ensembl
 See also [CITATION.cff](CITATION.cff).
 
 ## License
-Code is released under the [MIT License](LICENSE). Datasets keep their original licences.
+- **Source code:** [MIT License](LICENSE).
+- **Trained model weights** (GitHub release `v1.0.0`): provided **for research and educational use only, without warranty**. They were trained on third-party image collections (ISIC archive, clinical dermatology photograph collections, Kaggle/Roboflow datasets) that carry their own licences, some of which restrict commercial use; check them before any commercial use. The weights are not a medical device.
+- **Datasets** are not redistributed in this repository and keep their original licences.
 
 ## Author
 **Zehra Eraslan** — Software Engineering, Üsküdar University

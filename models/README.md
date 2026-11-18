@@ -11,3 +11,6 @@ Trained weights are **not committed to git** (size). Publish them as a **GitHub 
 | `skin_concern_final_model.keras` | Skin concern | **deployed** |
 
 Download helper: `python scripts/download_models.py` (set the release URL inside the script).
+
+## Licence of the weights
+Research and educational use only, no warranty. The models were trained on third-party datasets with their own licences (see `docs/dataset_provenance.md`); verify them before any commercial use. Not a medical device.
