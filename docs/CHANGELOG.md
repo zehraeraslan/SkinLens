@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased — import of the web application (Nov 2026)
+## Unreleased — static demo (Nov 2026)
+- Added a static *demo mode* (GitHub Pages workflow, `VITE_DEMO`) that replays real pre-computed model outputs for a sample image; uploads are disabled there. Web fonts reduced to Inter.
+
+## Import of the web application (Nov 2026)
 The application was prototyped on Replit and imported into this repository. While preparing it for public deployment the following issues were found and fixed:
 
 - **Disease class order (critical).** The inference service listed the disease classes as `Acne, Atopic Dermatitis, benign_lesion, Melanoma, Tinea…`, whereas the model outputs follow the alphabetical order of the training folders (`Acne, Atopic Dermatitis, Melanoma, Tinea Ringworm Candidiasis, benign_lesion`). Labels of the last three classes were therefore shifted. Fixed in `python_backend/app/config.py`.

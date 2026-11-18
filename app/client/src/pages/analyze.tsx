@@ -21,6 +21,7 @@ import { Progress } from "@/components/ui/progress";
 import type { AnalysisMode, AnalysisResult } from "@shared/schema";
 import ResultsDashboard from "@/components/results-dashboard";
 import { SkinLensLogo, SkinLensIcon } from "@/components/skinlens-logo";
+import { IS_DEMO, BASE } from "@/lib/demo";
 
 const analysisOptions = [
   {
@@ -89,6 +90,10 @@ export default function AnalyzePage() {
   };
 
   const handleFileSelect = useCallback((file: File) => {
+    if (IS_DEMO && file.name !== "sample.jpg") {
+      setError("Demo mode: uploading your own photo is disabled on this static site. Use the sample image, or run SkinLens locally for live analysis.");
+      return;
+    }
     if (!file.type.match(/^image\/(jpeg|png|jpg)$/)) {
       setError("Please upload a JPEG or PNG image.");
       return;
@@ -102,6 +107,12 @@ export default function AnalyzePage() {
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
   }, []);
+
+  const loadSample = async () => {
+    const res = await fetch(`${BASE}demo/sample.jpg`);
+    const blob = await res.blob();
+    handleFileSelect(new File([blob], "sample.jpg", { type: "image/jpeg" }));
+  };
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -151,10 +162,12 @@ export default function AnalyzePage() {
     }
 
     try {
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        body: formData,
-      });
+      const res = IS_DEMO
+        ? await fetch(`${BASE}demo/${selectedMode}.json`)
+        : await fetch("/api/analyze", {
+            method: "POST",
+            body: formData,
+          });
 
       if (!res.ok) {
         const data = await res.json();
@@ -293,6 +306,16 @@ export default function AnalyzePage() {
                     <X className="w-4 h-4 text-red-400" />
                   </button>
                 </motion.div>
+              )}
+
+              {IS_DEMO && !previewUrl && (
+                <div className="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-100 flex flex-col sm:flex-row items-center gap-3" data-testid="demo-callout">
+                  <p className="text-sm text-blue-900 flex-1">
+                    This static demo cannot run the models in your browser. Load the sample image to see a real,
+                    pre-computed analysis (prediction, Grad-CAM and recommendations).
+                  </p>
+                  <Button onClick={loadSample} data-testid="btn-sample">Use sample image</Button>
+                </div>
               )}
 
               <Card className="border-border/50 overflow-hidden">

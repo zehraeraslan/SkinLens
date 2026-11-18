@@ -45,6 +45,18 @@ Every prediction is accompanied by a **Grad-CAM heatmap**, and a **70 % confiden
 | **System pipeline and 70 % confidence gate** | **Recommendations and medical disclaimer** |
 | <img src="docs/images/ui-pipeline-confidence.png" alt="Pipeline and confidence"> | <img src="docs/images/ui-recommendations-disclaimer.png" alt="Recommendations and disclaimer"> |
 
+### Application walkthrough (real model output)
+
+The images below are screenshots of the running application analysing one sample photo (close-up of nose skin): all predictions, Grad-CAM overlays and recommendations are produced by the three trained models and the rule-based engine.
+
+| 1. Upload a photo | 2. Predictions with confidence |
+|---|---|
+| <img src="docs/images/app-upload.png" alt="Upload step"> | <img src="docs/images/app-results-overview.png" alt="Results overview"> |
+| **3. Grad-CAM heatmaps (disease / concern)** | **4. Personalised recommendations** |
+| <img src="docs/images/app-gradcam.png" alt="Grad-CAM tab"> | <img src="docs/images/app-recommendations.png" alt="Recommendations tab"> |
+
+> The sample is only an illustration, not a diagnosis: the disease model labels it *Acne* with 75 % confidence, which shows how coarse its categories are. The disease model was not trained on facial photographs (see the limitations above).
+
 ## Results
 
 | Model | Test set | Accuracy | Macro F1 | Weighted F1 |
@@ -131,7 +143,8 @@ cd app && npm install && npm run dev               # http://localhost:5000
 `POST /api/analyze` — `multipart/form-data`, field `image` (JPEG/PNG, max 8 MB) and `mode` (`full | skin_type | disease | concern`). Returns predictions, confidences, Grad-CAM overlays and recommendations as JSON. Details: [app/README.md](app/README.md).
 
 ## Live Demo
-> _Add link here after deployment (see [docs/deployment.md](docs/deployment.md))._
+
+**https://zehraeraslan.github.io/SkinLens/** — a static demo hosted on GitHub Pages (always on, no cold start). Because the models cannot run in a browser tab, the demo replays **real, pre-computed model outputs for a sample image**; uploading your own photo is disabled and a banner says so. For live analysis of your own photos, run the full application locally (see *Getting Started*).
 
 ## Datasets
 
